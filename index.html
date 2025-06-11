@@ -487,10 +487,10 @@
                     });
                      // Re-typeset all MathJax equations in the newly active topic after a short delay
                     setTimeout(() => {
-                        if (window.MathJax) {
+                        if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise === 'function') {
                             const activeTopicContent = document.querySelector('.topic-content.active');
                             if (activeTopicContent) {
-                                window.MathJax.typesetPromise([activeTopicContent]);
+                                MathJax.typesetPromise([activeTopicContent]).catch(err => console.error('MathJax initial typesetting error:', err));
                             }
                         }
                     }, 50); // Small delay to ensure elements are visible before typesetting
@@ -520,8 +520,8 @@
                         currentContent.classList.add('open');
                         // Re-typeset MathJax for the *just opened* content after a short delay
                         setTimeout(() => {
-                            if (window.MathJax) {
-                                window.MathJax.typesetPromise([currentContent]);
+                            if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise === 'function') {
+                                MathJax.typesetPromise([currentContent]).catch(err => console.error('MathJax card typesetting error:', err));
                             }
                         }, 50); // Shorter delay for direct display property
                     }
@@ -529,12 +529,17 @@
             });
 
             // Initial MathJax typesetting for all formulas in the initially active topic on page load
-            if (window.MathJax) {
-                const initialActiveTopic = document.querySelector('.topic-content.active');
-                if (initialActiveTopic) {
-                    window.MathJax.typesetPromise([initialActiveTopic]);
+            // Using a short timeout to ensure MathJax is fully ready after async load
+            setTimeout(() => {
+                if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise === 'function') {
+                    const initialActiveTopic = document.querySelector('.topic-content.active');
+                    if (initialActiveTopic) {
+                        MathJax.typesetPromise([initialActiveTopic]).catch(err => console.error('MathJax initial typesetting error:', err));
+                    }
+                } else {
+                    console.warn('MathJax or typesetPromise not available yet on DOMContentLoaded.');
                 }
-            }
+            }, 100); // Increased initial delay slightly just in case
         });
     </script>
 </body>
