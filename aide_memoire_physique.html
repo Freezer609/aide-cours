@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aide-Mémoire de Physique Interactif</title>
+    
+    <!-- Chosen Palette: Calm Academia (Original) -->
+    <!-- Application Structure Plan: A single-page application featuring a main navigation bar at the top to switch between the 6 key physics topics. Clicking a topic dynamically displays the relevant content below. Each topic's content is organized into expandable "cards" for each formula or concept. This card-based structure makes information digestible and encourages active exploration rather than passive reading. This design was chosen to transform a static cheatsheet into an engaging and efficient study tool, perfect for exam preparation. -->
+    <!-- Visualization & Content Choices: Main topics are interactive tabs. Sub-topics are section headers. Each formula is a card that can be clicked to reveal detailed descriptions of its variables. This interaction (show/hide details) is handled by Vanilla JS. All mathematical formulas from the source document are rendered using the MathJax library to ensure they are clear and professional, which is crucial for physics. The structure is built with semantic HTML and styled with Tailwind CSS. This approach enhances usability and learning retention by chunking information and adding an interactive layer. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF5; /* Calm Academia: Light Cream */
+            color: #3C4043; /* Calm Academia: Dark Slate */
+        }
+        .nav-button {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-button.active {
+            color: #1A73E8; /* Calm Academia: Muted Teal - using a slightly brighter blue for active state */
+            border-bottom-color: #1A73E8;
+        }
+        .formula-card {
+            background-color: #FFFFFF;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+        .formula-card:hover {
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
+        }
+        .card-header {
+            cursor: pointer;
+            padding: 1.5rem; /* Consistent padding */
+        }
+        .card-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+            padding: 0 1.5rem;
+        }
+        .card-content.open {
+            max-height: 500px; /* Adjust as needed, large enough for formulas */
+            padding: 1.5rem 1.5rem;
+        }
+        .topic-content {
+            display: none;
+        }
+        .topic-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800">Aide-Mémoire de Physique Interactif</h1>
+            <p class="text-lg text-gray-600 mt-2">Clique sur un chapitre pour voir les formules. Clique sur une formule pour voir les détails.</p>
+        </header>
+
+        <nav class="flex flex-wrap justify-center items-center border-b-2 border-gray-200 mb-8">
+            <button class="nav-button active text-lg font-medium py-3 px-2 md:px-4" data-target="constantes">Constantes & Définitions</button>
+            <button class="nav-button text-lg font-medium py-3 px-2 md:px-4" data-target="dynamique">Dynamique & Énergie</button>
+            <button class="nav-button text-lg font-medium py-3 px-2 md:px-4" data-target="balistique">Tir Balistique</button>
+            <button class="nav-button text-lg font-medium py-3 px-2 md:px-4" data-target="mcu">MCU</button>
+            <button class="nav-button text-lg font-medium py-3 px-2 md:px-4" data-target="gravitation">Gravitation</button>
+            <button class="nav-button text-lg font-medium py-3 px-2 md:px-4" data-target="electro">Électricité & Magnétisme</button>
+        </nav>
+
+        <main id="content-area">
+            <!-- Constantes & Définitions -->
+            <div id="constantes-content" class="topic-content active">
+                <h2 class="text-3xl font-bold mb-6 text-center">Constantes & Définitions Clés</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Accélération de la Pesanteur (g)</h3>
+                            <p class="text-2xl mt-2">$g \approx 9,81 \ m/s^2$</p>
+                        </div>
+                        <div class="card-content">
+                            <p>Accélération due à la gravité à la surface de la Terre. Varie légèrement selon le lieu.</p>
+                        </div>
+                    </div>
+
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Constante de Coulomb (k)</h3>
+                            <p class="text-2xl mt-2">$k \approx 9,0 \cdot 10^9 \ N \cdot m^2/C^2$</p>
+                        </div>
+                        <div class="card-content">
+                            <p>Constante fondamentale en électrostatique, utilisée dans la Loi de Coulomb.</p>
+                        </div>
+                    </div>
+
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Constante Gravitationnelle ($\gamma$)</h3>
+                            <p class="text-2xl mt-2">$\gamma \approx 6,674 \cdot 10^{-11} \ N \cdot m^2/kg^2$</p>
+                        </div>
+                        <div class="card-content">
+                            <p>Constante universelle de la gravitation, utilisée dans la Loi de Newton et les Lois de Kepler.</p>
+                        </div>
+                    </div>
+
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Vitesse Initiale ($v_0$)</h3>
+                            <p class="text-2xl mt-2">$v_0$</p>
+                        </div>
+                        <div class="card-content">
+                            <p>Vitesse d'un projectile au moment de son lancement. Se décompose en $v_{0x}$ et $v_{0y}$.</p>
+                            <p><strong>$v_{0x} = v_0 \cos(\theta)$</strong> (composante horizontale)</p>
+                            <p><strong>$v_{0y} = v_0 \sin(\theta)$</strong> (composante verticale)</p>
+                        </div>
+                    </div>
+
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Angle de Lancement ($\theta$)</h3>
+                            <p class="text-2xl mt-2">$\theta$</p>
+                        </div>
+                        <div class="card-content">
+                            <p>Angle par rapport à l'horizontale sous lequel un projectile est lancé.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Dynamique & Énergie -->
+            <div id="dynamique-content" class="topic-content">
+                <h2 class="text-3xl font-bold mb-6 text-center">Dynamique & Travail - Énergie</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Deuxième Loi de Newton</h3>
+                            <p class="text-2xl mt-2">$$\sum \vec{F} = m \vec{a}$$</p>
+                        </div>
+                        <div class="card-content">
+                            <p><strong>$\sum \vec{F}$</strong>: Somme vectorielle des forces (N)</p>
+                            <p><strong>$m$</strong>: Masse (kg)</p>
+                            <p><strong>$\vec{a}$</strong>: Accélération (m/s²)</p>
+                        </div>
+                    </div>
+                    
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Force Poids</h3>
+                            <p class="text-2xl mt-2">$$G = mg$$</p>
+                        </div>
+                        <div class="card-content">
+                            <p><strong>$G$</strong>: Poids (N)</p>
+                            <p><strong>$m$</strong>: Masse (kg)</p>
+                            <p><strong>$g$</strong>: Accélération de la pesanteur (m/s²)</p>
+                        </div>
+                    </div>
+
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Force de Frottement Cinétique</h3>
+                            <p class="text-2xl mt-2">$$F_{fc} = \mu_c N$$</p>
+                        </div>
+                        <div class="card-content">
+                             <p><strong>$F_{fc}$</strong>: Force de frottement cinétique (N)</p>
+                             <p><strong>$\mu_c$</strong>: Coefficient de frottement cinétique</p>
+                             <p><strong>$N$</strong>: Force Normale (N)</p>
+                        </div>
+                    </div>
+
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Travail d'une force constante</h3>
+                            <p class="text-2xl mt-2">$$W = F \cdot d \cdot \cos(\alpha)$$</p>
+                        </div>
+                        <div class="card-content">
+                            <p><strong>$W$</strong>: Travail (Joules, J)</p>
+                            <p><strong>$F$</strong>: Force (N)</p>
+                            <p><strong>$d$</strong>: Distance (m)</p>
+                            <p><strong>$\alpha$</strong>: Angle entre la force et le déplacement</p>
+                        </div>
+                    </div>
+                    
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Énergie Cinétique</h3>
+                            <p class="text-2xl mt-2">$$E_C = \frac{1}{2} m v^2$$</p>
+                        </div>
+                        <div class="card-content">
+                            <p><strong>$E_C$</strong>: Énergie cinétique (J)</p>
+                            <p><strong>$m$</strong>: Masse (kg)</p>
+                            <p><strong>$v$</strong>: Vitesse (m/s)</p>
+                        </div>
+                    </div>
+
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Énergie Potentielle de Pesanteur</h3>
+                            <p class="text-2xl mt-2">$$E_P = mgh$$</p>
+                        </div>
+                        <div class="card-content">
+                            <p><strong>$E_P$</strong>: Énergie potentielle (J)</p>
+                            <p><strong>$m$</strong>: Masse (kg)</p>
+                            <p><strong>$g$</strong>: Accélération de la pesanteur (m/s²)</p>
+                            <p><strong>$h$</strong>: Hauteur (m)</p>
+                        </div>
+                    </div>
+                    
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Conservation Énergie Mécanique</h3>
+                            <p class="text-2xl mt-2">$$E_{M,initial} = E_{M,final}$$</p>
+                        </div>
+                        <div class="card-content">
+                            <p>Valable en l'absence de forces non conservatives (ex: frottements).</p>
+                            <p>$E_M = E_C + E_P$</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Tir Balistique -->
+            <div id="balistique-content" class="topic-content">
+                <h2 class="text-3xl font-bold mb-6 text-center">Tir Balistique</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    
+                     <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Position Horizontale</h3>
+                            <p class="text-2xl mt-2">$x(t) = x_0 + v_{0x} t$</p>
+                        </div>
+                         <div class="card-content">
+                             <p>Le mouvement horizontal est à vitesse constante car $a_x = 0$.</p>
+                             <p>Où $v_{0x}$ est la composante horizontale de la vitesse initiale (voir "Constantes & Définitions").</p>
+                        </div>
+                    </div>
+                    
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Position Verticale</h3>
+                            <p class="text-2xl mt-2">$y(t) = y_0 + v_{0y} t - \frac{1}{2} gt^2$</p>
+                        </div>
+                         <div class="card-content">
+                             <p>Le mouvement vertical est uniformément accéléré car $a_y = -g$.</p>
+                             <p>Où $v_{0y}$ est la composante verticale de la vitesse initiale (voir "Constantes & Définitions").</p>
+                        </div>
+                    </div>
+                    
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Hauteur Maximale</h3>
+                            <p class="text-2xl mt-2">$$H_{max} = \frac{(v_0 \sin(\theta))^2}{2g}$$</p>
+                        </div>
+                        <div class="card-content">
+                             <p>Valable pour un tir depuis le sol ($y_0=0$) et retombant au sol.</p>
+                        </div>
+                    </div>
+
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Portée</h3>
+                            <p class="text-2xl mt-2">$$R = \frac{v_0^2 \sin(2\theta)}{g}$$</p>
+                        </div>
+                         <div class="card-content">
+                            <p>Valable pour un tir depuis le sol ($y_0=0$) et retombant au sol.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- MCU -->
+            <div id="mcu-content" class="topic-content">
+                 <h2 class="text-3xl font-bold mb-6 text-center">Mouvement Circulaire Uniforme (MCU)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    
+                     <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Vitesse Tangentielle</h3>
+                            <p class="text-2xl mt-2">$v = R \omega = \frac{2\pi R}{T} = 2\pi R f$</p>
+                        </div>
+                         <div class="card-content">
+                            <p><strong>$v$</strong>: Vitesse tangentielle (m/s)</p>
+                            <p><strong>$R$</strong>: Rayon de la trajectoire (m)</p>
+                            <p><strong>$\omega$</strong>: Vitesse angulaire (rad/s)</p>
+                            <p><strong>$T$</strong>: Période (s)</p>
+                            <p><strong>$f$</strong>: Fréquence (Hz)</p>
+                        </div>
+                    </div>
+
+                     <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Accélération Centripète</h3>
+                            <p class="text-2xl mt-2">$$a_c = \frac{v^2}{R} = R \omega^2$$</p>
+                        </div>
+                         <div class="card-content">
+                            <p>Dirigée vers le centre du cercle.</p>
+                            <p><strong>$v$</strong>: Vitesse tangentielle (m/s)</p>
+                            <p><strong>$R$</strong>: Rayon (m)</p>
+                            <p><strong>$\omega$</strong>: Vitesse angulaire (rad/s)</p>
+                        </div>
+                    </div>
+                    
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Force Centripète</h3>
+                            <p class="text-2xl mt-2">$$F_c = \frac{m v^2}{R}$$</p>
+                        </div>
+                         <div class="card-content">
+                            <p>Force nette dirigée vers le centre, responsable du mouvement circulaire.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Vitesse Angulaire</h3>
+                            <p class="text-2xl mt-2">$$\omega = \frac{2\pi}{T} = 2\pi f$$</p>
+                        </div>
+                        <div class="card-content">
+                            <p><strong>$T$</strong>: Période (s)</p>
+                            <p><strong>$f$</strong>: Fréquence (Hz)</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Gravitation -->
+            <div id="gravitation-content" class="topic-content">
+                <h2 class="text-3xl font-bold mb-6 text-center">Gravitation Universelle</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Loi de la Gravitation de Newton</h3>
+                            <p class="text-2xl mt-2">$$F_g = \gamma \frac{m_1 m_2}{r^2}$$</p>
+                        </div>
+                         <div class="card-content">
+                            <p><strong>$\gamma$</strong>: Constante gravitationnelle universelle (voir "Constantes & Définitions")</p>
+                            <p><strong>$m_1, m_2$</strong>: Masses (kg)</p>
+                            <p><strong>$r$</strong>: Distance entre les centres (m)</p>
+                        </div>
+                    </div>
+
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Champ de Gravité</h3>
+                            <p class="text-2xl mt-2">$$g = \gamma \frac{M}{r^2}$$</p>
+                        </div>
+                         <div class="card-content">
+                             <p>Champ créé par une masse centrale M.</p>
+                             <p>Où $\gamma$ est la constante gravitationnelle universelle (voir "Constantes & Définitions").</p>
+                        </div>
+                    </div>
+                    
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Vitesse Orbitale d'un Satellite</h3>
+                            <p class="text-2xl mt-2">$$v = \sqrt{\frac{\gamma M}{R}}$$</p>
+                        </div>
+                         <div class="card-content">
+                            <p><strong>$v$</strong>: Vitesse orbitale du satellite (m/s)</p>
+                            <p><strong>$\gamma$</strong>: Constante gravitationnelle universelle (voir "Constantes & Définitions")</p>
+                            <p><strong>$M$</strong>: Masse du corps central (planète) (kg)</p>
+                            <p><strong>$R$</strong>: Rayon de l'orbite (distance du satellite au centre du corps central) (m)</p>
+                        </div>
+                    </div>
+
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Troisième Loi de Kepler</h3>
+                            <p class="text-2xl mt-2">$$\frac{T^2}{R^3} = \frac{4\pi^2}{\gamma M}$$</p>
+                        </div>
+                        <div class="card-content">
+                            <p>Relation entre période orbitale T et rayon R.</p>
+                             <p><strong>$M$</strong>: Masse du corps central.</p>
+                             <p>Où $\gamma$ est la constante gravitationnelle universelle (voir "Constantes & Définitions").</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+            <!-- Électricité & Magnétisme -->
+            <div id="electro-content" class="topic-content">
+                <h2 class="text-3xl font-bold mb-6 text-center">Électricité & Magnétisme</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Loi de Coulomb</h3>
+                            <p class="text-2xl mt-2">$$F_e = k \frac{|q_1 q_2|}{r^2}$$</p>
+                        </div>
+                         <div class="card-content">
+                            <p><strong>$k$</strong>: Constante de Coulomb (voir "Constantes & Définitions")</p>
+                            <p><strong>$q_1, q_2$</strong>: Charges (C)</p>
+                            <p><strong>$r$</strong>: Distance (m)</p>
+                        </div>
+                    </div>
+                    
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Champ Électrique</h3>
+                            <p class="text-2xl mt-2">$$E = k \frac{|Q|}{r^2}$$</p>
+                        </div>
+                         <div class="card-content">
+                             <p>Champ créé par une charge ponctuelle Q.</p>
+                             <p>Où $k$ est la constante de Coulomb (voir "Constantes & Définitions").</p>
+                        </div>
+                    </div>
+
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Force de Laplace</h3>
+                            <p class="text-2xl mt-2">$$F_m = B \cdot I \cdot L \cdot \sin(\alpha)$$</p>
+                        </div>
+                         <div class="card-content">
+                            <p>Force sur un conducteur dans un champ B.</p>
+                            <p><strong>$B$</strong>: Champ magnétique (T)</p>
+                            <p><strong>$I$</strong>: Courant (A)</p>
+                            <p><strong>$L$</strong>: Longueur du fil (m)</p>
+                            <p><strong>$\alpha$</strong>: Angle entre le courant et le champ B</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navButtons = document.querySelectorAll('.nav-button');
+            const topicContents = document.querySelectorAll('.topic-content');
+            const cardHeaders = document.querySelectorAll('.card-header');
+
+            // Handle navigation clicks
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active state from all nav buttons
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    // Add active state to the clicked button
+                    button.classList.add('active');
+
+                    // Show/hide topic content
+                    const targetId = button.dataset.target + '-content';
+                    topicContents.forEach(contentDiv => {
+                        if (contentDiv.id === targetId) {
+                            contentDiv.classList.add('active'); // Show it
+                            // Ensure all cards in the newly active topic are initially closed
+                            const cardsInActiveTopic = contentDiv.querySelectorAll('.formula-card');
+                            cardsInActiveTopic.forEach(card => {
+                                const cardContent = card.querySelector('.card-content');
+                                cardContent.classList.remove('open');
+                            });
+                        } else {
+                            contentDiv.classList.remove('active');
+                        }
+                    });
+                     // Re-typeset all MathJax equations in the newly active topic after a short delay
+                    setTimeout(() => {
+                        if (window.MathJax) {
+                            const activeTopicContent = document.querySelector('.topic-content.active');
+                            if (activeTopicContent) {
+                                window.MathJax.typesetPromise([activeTopicContent]);
+                            }
+                        }
+                    }, 50); // Small delay to ensure elements are visible before typesetting
+                });
+            });
+
+            // Handle formula card expansion/collapse
+            cardHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const currentContent = header.nextElementSibling;
+                    const isCurrentlyOpen = currentContent.classList.contains('open');
+
+                    // Close all other open cards within the current topic
+                    const currentTopicContent = header.closest('.topic-content');
+                    if (currentTopicContent) {
+                        currentTopicContent.querySelectorAll('.card-content.open').forEach(openContent => {
+                            if (openContent !== currentContent) { // Don't close the current one if it's already open
+                                openContent.classList.remove('open');
+                            }
+                        });
+                    }
+
+                    // Toggle the clicked card
+                    if (isCurrentlyOpen) {
+                        currentContent.classList.remove('open');
+                    } else {
+                        currentContent.classList.add('open');
+                        // Re-typeset MathJax for the *just opened* content after a short delay
+                        setTimeout(() => {
+                            if (window.MathJax) {
+                                window.MathJax.typesetPromise([currentContent]);
+                            }
+                        }, 50); // Shorter delay for direct display property
+                    }
+                });
+            });
+
+            // Initial MathJax typesetting for all formulas in the initially active topic on page load
+            if (window.MathJax) {
+                const initialActiveTopic = document.querySelector('.topic-content.active');
+                if (initialActiveTopic) {
+                    window.MathJax.typesetPromise([initialActiveTopic]);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
