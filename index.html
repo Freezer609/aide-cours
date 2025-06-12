@@ -5,16 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aide-Mémoire de Physique Interactif</title>
     
-    <!-- Chosen Palette: Calm Academia (Original) -->
-    <!-- Application Structure Plan: A single-page application featuring a main navigation bar at the top to switch between the 6 key physics topics. Clicking a topic dynamically displays the relevant content below. Each topic's content is organized into expandable "cards" for each formula or concept. This card-based structure makes information digestible and encourages active exploration rather than passive reading. This design was chosen to transform a static cheatsheet into an engaging and efficient study tool, perfect for exam preparation. -->
-    <!-- Visualization & Content Choices: Main topics are interactive tabs. Sub-topics are section headers. Each formula is a card that can be clicked to reveal detailed descriptions of its variables. This interaction (show/hide details) is handled by Vanilla JS. All mathematical formulas from the source document are rendered using the MathJax library to ensure they are clear and professional, which is crucial for physics. The structure is built with semantic HTML and styled with Tailwind CSS. This approach enhances usability and learning retention by chunking information and adding an interactive layer. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <script>
+    // Configuration MathJax pour l'affichage des formules LaTeX
     MathJax = {
       tex: {
         inlineMath: [['$', '$'], ['\\(', '\\)']],
@@ -30,19 +26,23 @@
       src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
     </script>
     <style>
+        /* Styles généraux pour le corps de la page */
         body {
             font-family: 'Inter', sans-serif;
             background-color: #FDFBF5; /* Calm Academia: Light Cream */
             color: #3C4043; /* Calm Academia: Dark Slate */
         }
+        /* Styles pour les boutons de navigation */
         .nav-button {
             transition: all 0.3s ease;
             border-bottom: 2px solid transparent;
         }
+        /* Styles pour le bouton de navigation actif */
         .nav-button.active {
             color: #1A73E8; /* Calm Academia: Muted Teal - using a slightly brighter blue for active state */
             border-bottom-color: #1A73E8;
         }
+        /* Styles pour les cartes de formule */
         .formula-card {
             background-color: #FFFFFF;
             border-radius: 12px;
@@ -50,26 +50,32 @@
             transition: box-shadow 0.3s ease;
             overflow: hidden;
         }
+        /* Styles pour les cartes de formule au survol */
         .formula-card:hover {
             box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
         }
+        /* Styles pour l'en-tête des cartes, rendues cliquables */
         .card-header {
             cursor: pointer;
             padding: 1.5rem; /* Consistent padding */
         }
+        /* Styles pour le contenu des cartes (initialement caché) */
         .card-content {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.5s ease-out, padding 0.5s ease-out;
             padding: 0 1.5rem;
         }
+        /* Styles pour le contenu des cartes lorsqu'il est ouvert */
         .card-content.open {
             max-height: 500px; /* Adjust as needed, large enough for formulas */
             padding: 1.5rem 1.5rem;
         }
+        /* Styles pour les sections de contenu (initialement cachées) */
         .topic-content {
             display: none;
         }
+        /* Styles pour la section de contenu active */
         .topic-content.active {
             display: block;
         }
@@ -93,7 +99,6 @@
         </nav>
 
         <main id="content-area">
-            <!-- Constantes & Définitions -->
             <div id="constantes-content" class="topic-content active">
                 <h2 class="text-3xl font-bold mb-6 text-center">Constantes & Définitions Clés</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -161,10 +166,59 @@
                         </div>
                     </div>
 
+                    <!-- Nouvelle formule pour Mu_0 -->
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Perméabilité Magnétique du Vide ($\mu_0$)</h3>
+                            <p class="text-2xl mt-2">$\mu_0 \approx 4\pi \cdot 10^{-7} \ T \cdot m/A$</p>
+                        </div>
+                        <div class="card-content">
+                            <p>Constante fondamentale en magnétisme, utilisée dans les lois du champ magnétique.</p>
+                            <p><strong>T</strong>: Tesla (unité de champ magnétique)</p>
+                            <p><strong>m</strong>: Mètre (unité de longueur)</p>
+                            <p><strong>A</strong>: Ampère (unité de courant électrique)</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Section pour l'électrisation, maintenant sous-catégorie des constantes -->
+                <h3 class="text-3xl font-bold mb-6 text-center mt-12">Électrisation</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Électrisation par Frottement</h3>
+                            <p class="text-2xl mt-2">Définition</p>
+                        </div>
+                        <div class="card-content">
+                            <p>Phénomène par lequel deux corps initialement neutres acquièrent des charges électriques de signes opposés après avoir été frottés l'un contre l'autre. Il y a transfert d'électrons d'un corps à l'autre.</p>
+                        </div>
+                    </div>
+
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Électrisation par Contact</h3>
+                            <p class="text-2xl mt-2">Définition</p>
+                        </div>
+                        <div class="card-content">
+                            <p>Transfert de charges électriques entre deux corps (au moins un est chargé) lorsqu'ils sont mis en contact. Les charges se répartissent jusqu'à l'équilibre. Le corps neutre acquiert une charge de même signe que le corps chargé.</p>
+                        </div>
+                    </div>
+
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Électrisation par Influence (ou Induction)</h3>
+                            <p class="text-2xl mt-2">Définition</p>
+                        </div>
+                        <div class="card-content">
+                            <p>Modification de la répartition des charges électriques dans un corps conducteur neutre lorsqu'un corps chargé est approché, sans qu'il y ait contact. Les charges de signe opposé à la charge du corps inducteur sont attirées vers le corps inducteur, tandis que les charges de même signe sont repoussées. Le corps reste globalement neutre si aucune charge n'est ajoutée ou retirée.</p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
-            <!-- Dynamique & Énergie -->
             <div id="dynamique-content" class="topic-content">
                 <h2 class="text-3xl font-bold mb-6 text-center">Dynamique & Travail - Énergie</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -257,12 +311,11 @@
                 </div>
             </div>
 
-            <!-- Tir Balistique -->
             <div id="balistique-content" class="topic-content">
                 <h2 class="text-3xl font-bold mb-6 text-center">Tir Balistique</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     
-                     <div class="formula-card">
+                    <div class="formula-card">
                         <div class="card-header">
                             <h3 class="text-xl font-semibold">Position Horizontale</h3>
                             <p class="text-2xl mt-2">$x(t) = x_0 + v_{0x} t$</p>
@@ -283,7 +336,7 @@
                              <p>Où $v_{0y}$ est la composante verticale de la vitesse initiale (voir "Constantes & Définitions").</p>
                         </div>
                     </div>
-                    
+                   
                     <div class="formula-card">
                         <div class="card-header">
                             <h3 class="text-xl font-semibold">Hauteur Maximale</h3>
@@ -299,7 +352,7 @@
                             <h3 class="text-xl font-semibold">Portée</h3>
                             <p class="text-2xl mt-2">$$R = \frac{v_0^2 \sin(2\theta)}{g}$$</p>
                         </div>
-                         <div class="card-content">
+                        <div class="card-content">
                             <p>Valable pour un tir depuis le sol ($y_0=0$) et retombant au sol.</p>
                         </div>
                     </div>
@@ -307,11 +360,10 @@
                 </div>
             </div>
 
-            <!-- MCU -->
             <div id="mcu-content" class="topic-content">
                  <h2 class="text-3xl font-bold mb-6 text-center">Mouvement Circulaire Uniforme (MCU)</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    
+             
                      <div class="formula-card">
                         <div class="card-header">
                             <h3 class="text-xl font-semibold">Vitesse Tangentielle</h3>
@@ -363,194 +415,142 @@
                 </div>
             </div>
 
-            <!-- Gravitation -->
             <div id="gravitation-content" class="topic-content">
                 <h2 class="text-3xl font-bold mb-6 text-center">Gravitation Universelle</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
                     <div class="formula-card">
                         <div class="card-header">
-                            <h3 class="text-xl font-semibold">Loi de la Gravitation de Newton</h3>
+                            <h3 class="text-xl font-semibold">Loi de la Gravitation Universelle</h3>
                             <p class="text-2xl mt-2">$$F_g = \gamma \frac{m_1 m_2}{r^2}$$</p>
                         </div>
-                         <div class="card-content">
-                            <p><strong>$\gamma$</strong>: Constante gravitationnelle universelle (voir "Constantes & Définitions")</p>
-                            <p><strong>$m_1, m_2$</strong>: Masses (kg)</p>
-                            <p><strong>$r$</strong>: Distance entre les centres (m)</p>
+                        <div class="card-content">
+                            <p>Force d'attraction entre deux masses.</p>
+                            <p><strong>$F_g$</strong>: Force gravitationnelle (N)</p>
+                            <p><strong>$\gamma$</strong>: Constante gravitationnelle universelle</p>
+                            <p><strong>$m_1, m_2$</strong>: Masses des objets (kg)</p>
+                            <p><strong>$r$</strong>: Distance entre les centres des masses (m)</p>
                         </div>
                     </div>
 
-                    <div class="formula-card">
+                     <div class="formula-card">
                         <div class="card-header">
-                            <h3 class="text-xl font-semibold">Champ de Gravité</h3>
+                            <h3 class="text-xl font-semibold">Champ Gravitationnel</h3>
                             <p class="text-2xl mt-2">$$g = \gamma \frac{M}{r^2}$$</p>
                         </div>
-                         <div class="card-content">
-                             <p>Champ créé par une masse centrale M.</p>
-                             <p>Où $\gamma$ est la constante gravitationnelle universelle (voir "Constantes & Définitions").</p>
-                        </div>
-                    </div>
-                    
-                    <div class="formula-card">
-                        <div class="card-header">
-                            <h3 class="text-xl font-semibold">Vitesse Orbitale d'un Satellite</h3>
-                            <p class="text-2xl mt-2">$$v = \sqrt{\frac{\gamma M}{R}}$$</p>
-                        </div>
-                         <div class="card-content">
-                            <p><strong>$v$</strong>: Vitesse orbitale du satellite (m/s)</p>
-                            <p><strong>$\gamma$</strong>: Constante gravitationnelle universelle (voir "Constantes & Définitions")</p>
-                            <p><strong>$M$</strong>: Masse du corps central (planète) (kg)</p>
-                            <p><strong>$R$</strong>: Rayon de l'orbite (distance du satellite au centre du corps central) (m)</p>
-                        </div>
-                    </div>
-
-                    <div class="formula-card">
-                        <div class="card-header">
-                            <h3 class="text-xl font-semibold">Troisième Loi de Kepler</h3>
-                            <p class="text-2xl mt-2">$$\frac{T^2}{R^3} = \frac{4\pi^2}{\gamma M}$$</p>
-                        </div>
                         <div class="card-content">
-                            <p>Relation entre période orbitale T et rayon R.</p>
-                             <p><strong>$M$</strong>: Masse du corps central.</p>
-                             <p>Où $\gamma$ est la constante gravitationnelle universelle (voir "Constantes & Définitions").</p>
+                            <p>Intensité du champ gravitationnel créé par une masse $M$.</p>
+                            <p><strong>$g$</strong>: Champ gravitationnel (N/kg ou m/s²)</p>
+                            <p><strong>$M$</strong>: Masse de l'objet (kg)</p>
+                            <p><strong>$r$</strong>: Distance au centre de la masse (m)</p>
                         </div>
                     </div>
 
                 </div>
             </div>
-            
-            <!-- Électricité & Magnétisme -->
+
             <div id="electro-content" class="topic-content">
                 <h2 class="text-3xl font-bold mb-6 text-center">Électricité & Magnétisme</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
+                    
                     <div class="formula-card">
                         <div class="card-header">
                             <h3 class="text-xl font-semibold">Loi de Coulomb</h3>
                             <p class="text-2xl mt-2">$$F_e = k \frac{|q_1 q_2|}{r^2}$$</p>
                         </div>
-                         <div class="card-content">
-                            <p><strong>$k$</strong>: Constante de Coulomb (voir "Constantes & Définitions")</p>
+                        <div class="card-content">
+                            <p>Force d'attraction ou de répulsion entre deux charges ponctuelles.</p>
+                            <p><strong>$F_e$</strong>: Force électrique (N)</p>
+                            <p><strong>$k$</strong>: Constante de Coulomb</p>
                             <p><strong>$q_1, q_2$</strong>: Charges (C)</p>
-                            <p><strong>$r$</strong>: Distance (m)</p>
-                        </div>
-                    </div>
-                    
-                    <div class="formula-card">
-                        <div class="card-header">
-                            <h3 class="text-xl font-semibold">Champ Électrique</h3>
-                            <p class="text-2xl mt-2">$$E = k \frac{|Q|}{r^2}$$</p>
-                        </div>
-                         <div class="card-content">
-                             <p>Champ créé par une charge ponctuelle Q.</p>
-                             <p>Où $k$ est la constante de Coulomb (voir "Constantes & Définitions").</p>
+                            <p><strong>$r$</strong>: Distance entre les charges (m)</p>
                         </div>
                     </div>
 
                     <div class="formula-card">
                         <div class="card-header">
-                            <h3 class="text-xl font-semibold">Force de Laplace</h3>
-                            <p class="text-2xl mt-2">$$F_m = B \cdot I \cdot L \cdot \sin(\alpha)$$</p>
+                            <h3 class="text-xl font-semibold">Champ Électrique</h3>
+                            <p class="text-2xl mt-2">$$E = k \frac{|q|}{r^2}$$</p>
                         </div>
-                         <div class="card-content">
-                            <p>Force sur un conducteur dans un champ B.</p>
-                            <p><strong>$B$</strong>: Champ magnétique (T)</p>
-                            <p><strong>$I$</strong>: Courant (A)</p>
-                            <p><strong>$L$</strong>: Longueur du fil (m)</p>
-                            <p><strong>$\alpha$</strong>: Angle entre le courant et le champ B</p>
+                        <div class="card-content">
+                            <p>Intensité du champ électrique créé par une charge ponctuelle $q$.</p>
+                            <p><strong>$E$</strong>: Champ électrique (N/C ou V/m)</p>
+                            <p><strong>$k$</strong>: Constante de Coulomb</p>
+                            <p><strong>$q$</strong>: Charge (C)</p>
+                            <p><strong>$r$</strong>: Distance à la charge (m)</p>
+                        </div>
+                    </div>
+
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Champ Magnétique (Bobine Circulaire)</h3>
+                            <p class="text-2xl mt-2">$$B = \frac{\mu_0 I}{2r}$$</p>
+                        </div>
+                        <div class="card-content">
+                            <p>Intensité du champ magnétique au centre d'une bobine circulaire de rayon $r$ traversée par un courant $I$.</p>
+                            <p><strong>$B$</strong>: Champ magnétique (Tesla, T)</p>
+                            <p><strong>$\mu_0$</strong>: Perméabilité magnétique du vide</p>
+                            <p><strong>$I$</strong>: Courant électrique (Ampère, A)</p>
+                            <p><strong>$r$</strong>: Rayon de la bobine (m)</p>
+                        </div>
+                    </div>
+
+                     <!-- Nouvelle formule pour la Force de Laplace -->
+                    <div class="formula-card">
+                        <div class="card-header">
+                            <h3 class="text-xl font-semibold">Force de Laplace</h3>
+                            <p class="text-2xl mt-2">$$F = BIL \sin(\theta)$$</p>
+                        </div>
+                        <div class="card-content">
+                            <p>Force exercée sur un conducteur de longueur $L$ parcouru par un courant $I$ et placé dans un champ magnétique $B$.</p>
+                            <p><strong>$F$</strong>: Force de Laplace (N)</p>
+                            <p><strong>$B$</strong>: Champ magnétique (Tesla, T)</p>
+                            <p><strong>$I$</strong>: Courant électrique (Ampère, A)</p>
+                            <p><strong>$L$</strong>: Longueur du conducteur dans le champ (m)</p>
+                            <p><strong>$\theta$</strong>: Angle entre le vecteur courant et le vecteur champ magnétique</p>
                         </div>
                     </div>
 
                 </div>
             </div>
 
+
         </main>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gère l'affichage des différentes sections de contenu
             const navButtons = document.querySelectorAll('.nav-button');
             const topicContents = document.querySelectorAll('.topic-content');
-            const cardHeaders = document.querySelectorAll('.card-header');
+            const contentArea = document.getElementById('content-area');
 
-            // Handle navigation clicks
             navButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    // Remove active state from all nav buttons
+                button.addEventListener('click', function() {
+                    // Supprime la classe 'active' de tous les boutons et contenus
                     navButtons.forEach(btn => btn.classList.remove('active'));
-                    // Add active state to the clicked button
-                    button.classList.add('active');
+                    topicContents.forEach(content => content.classList.remove('active'));
 
-                    // Show/hide topic content
-                    const targetId = button.dataset.target + '-content';
-                    topicContents.forEach(contentDiv => {
-                        if (contentDiv.id === targetId) {
-                            contentDiv.classList.add('active'); // Show it
-                            // Ensure all cards in the newly active topic are initially closed
-                            const cardsInActiveTopic = contentDiv.querySelectorAll('.formula-card');
-                            cardsInActiveTopic.forEach(card => {
-                                const cardContent = card.querySelector('.card-content');
-                                cardContent.classList.remove('open');
-                            });
-                        } else {
-                            contentDiv.classList.remove('active');
-                        }
-                    });
-                     // Re-typeset all MathJax equations in the newly active topic after a short delay
-                    setTimeout(() => {
-                        if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise === 'function') {
-                            const activeTopicContent = document.querySelector('.topic-content.active');
-                            if (activeTopicContent) {
-                                MathJax.typesetPromise([activeTopicContent]).catch(err => console.error('MathJax initial typesetting error:', err));
-                            }
-                        }
-                    }, 50); // Small delay to ensure elements are visible before typesetting
+                    // Ajoute la classe 'active' au bouton cliqué
+                    this.classList.add('active');
+
+                    // Affiche la section de contenu correspondante
+                    const targetId = this.getAttribute('data-target') + '-content';
+                    document.getElementById(targetId).classList.add('active');
                 });
             });
 
-            // Handle formula card expansion/collapse
-            cardHeaders.forEach(header => {
-                header.addEventListener('click', () => {
-                    const currentContent = header.nextElementSibling;
-                    const isCurrentlyOpen = currentContent.classList.contains('open');
+            // Gère l'ouverture/fermeture des cartes de formule
+            const formulaCards = document.querySelectorAll('.formula-card');
 
-                    // Close all other open cards within the current topic
-                    const currentTopicContent = header.closest('.topic-content');
-                    if (currentTopicContent) {
-                        currentTopicContent.querySelectorAll('.card-content.open').forEach(openContent => {
-                            if (openContent !== currentContent) { // Don't close the current one if it's already open
-                                openContent.classList.remove('open');
-                            }
-                        });
-                    }
+            formulaCards.forEach(card => {
+                const header = card.querySelector('.card-header');
+                const content = card.querySelector('.card-content');
 
-                    // Toggle the clicked card
-                    if (isCurrentlyOpen) {
-                        currentContent.classList.remove('open');
-                    } else {
-                        currentContent.classList.add('open');
-                        // Re-typeset MathJax for the *just opened* content after a short delay
-                        setTimeout(() => {
-                            if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise === 'function') {
-                                MathJax.typesetPromise([currentContent]).catch(err => console.error('MathJax card typesetting error:', err));
-                            }
-                        }, 50); // Shorter delay for direct display property
-                    }
+                header.addEventListener('click', function() {
+                    content.classList.toggle('open');
                 });
             });
-
-            // Initial MathJax typesetting for all formulas in the initially active topic on page load
-            // Using a short timeout to ensure MathJax is fully ready after async load
-            setTimeout(() => {
-                if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise === 'function') {
-                    const initialActiveTopic = document.querySelector('.topic-content.active');
-                    if (initialActiveTopic) {
-                        MathJax.typesetPromise([initialActiveTopic]).catch(err => console.error('MathJax initial typesetting error:', err));
-                    }
-                } else {
-                    console.warn('MathJax or typesetPromise not available yet on DOMContentLoaded.');
-                }
-            }, 100); // Increased initial delay slightly just in case
         });
     </script>
 </body>
